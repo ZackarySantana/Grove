@@ -1,5 +1,7 @@
 import { JSONClient } from "./json";
-import { EvergreenConfig } from "../pkg/evergreen/config";
+import { EvergreenConfig } from "src/pkg/evergreen/config";
+import { Patch } from "src/pkg/evergreen/types/patch";
+import { Either } from "src/types";
 
 export class EvergreenClient extends JSONClient {
     constructor(config: EvergreenConfig) {
@@ -10,5 +12,9 @@ export class EvergreenClient extends JSONClient {
                 "Api-User": config.user,
             },
         });
+    }
+
+    public getRecentPatches(): Promise<Either<Patch[], Error>> {
+        return this.get<Patch[]>("/patches/mine?n=10");
     }
 }

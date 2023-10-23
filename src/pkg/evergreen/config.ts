@@ -5,19 +5,17 @@ import { LOCAL_CONFIG, PROD_CONFIG, STAGING_CONFIG } from "../constants";
 import { homedir } from "os";
 import { Either } from "../../types";
 
-export type API = {
-    url: string;
-    key: string;
-};
-
-export type Project = {
+export type EvergreenProject = {
     path: string;
-    name: string;
+    id: string;
 };
 
 export type EvergreenConfig = {
-    api: API;
-    projects: Project[];
+    api: {
+        url: string;
+        key: string;
+    };
+    projects: EvergreenProject[];
     user: string;
     uiURL: string;
 };
@@ -73,11 +71,11 @@ export function getEvergreenConfig(): Thenable<Either<EvergreenConfig, Error>> {
                 Record<string, string>
             >(doc, "projects_for_directory");
 
-            const projects = [] as Project[];
+            const projects = [] as EvergreenProject[];
             for (const path in projectsForDirectory) {
                 projects.push({
                     path,
-                    name: projectsForDirectory[path],
+                    id: projectsForDirectory[path],
                 });
             }
 

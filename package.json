@@ -18,12 +18,15 @@
     "contributes": {
         "commands": [
             {
-                "command": "grove.helloWorld2",
-                "title": "Hello World",
-                "icon": {
-                    "light": "media/resources/light/refresh.svg",
-                    "dark": "media/resources/dark/refresh.svg"
-                }
+                "command": "grove.viewPatches",
+                "title": "View Recent Patches",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.createPatch",
+                "title": "Create Patch",
+                "category": "%grove.command.category%",
+                "icon": "$(diff-review-insert)"
             }
         ],
         "viewsContainers": {
@@ -38,32 +41,41 @@
         "views": {
             "grove": [
                 {
-                    "id": "grove.patches",
+                    "id": "grove.open_patches",
                     "name": "Open Patches"
                 },
                 {
-                    "id": "grove.test",
-                    "name": "Open test",
+                    "id": "grove.recent_patches",
+                    "name": "Recent Patches",
+                    "visibility": "collapsed"
+                },
+                {
+                    "id": "grove.mainline_patches",
+                    "name": "Mainline Patches",
                     "visibility": "collapsed"
                 }
             ]
         },
         "viewsWelcome": [
             {
-                "view": "grove.patches",
+                "view": "grove.open_patches",
                 "contents": "No open patches found.\n[Create Patch](command:grove.createPatch)"
+            },
+            {
+                "view": "grove.recent_patches",
+                "contents": "No recent patches found. You should create one above!"
+            },
+            {
+                "view": "grove.mainline_patches",
+                "contents": "No mainline patches found. You should start creating on your mainline branch!"
             }
         ],
         "menus": {
             "view/title": [
                 {
-                    "command": "grove.helloWorld2",
-                    "when": "view == grove.patches",
+                    "command": "grove.createPatch",
+                    "when": "view == grove.open_patches",
                     "group": "navigation"
-                },
-                {
-                    "command": "grove.helloWorld2",
-                    "when": "view == grove.patches"
                 }
             ]
         },
@@ -72,7 +84,28 @@
                 "fileMatch": "**/self-tests.yml",
                 "url": "./schemas/self-tests.json"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Grove",
+            "properties": {
+                "grove.config": {
+                    "type": "string",
+                    "enum": [
+                        "prod",
+                        "staging",
+                        "local"
+                    ],
+                    "enumDescriptions": [
+                        "%grove.description.config.prod%",
+                        "%grove.description.config.staging%",
+                        "%grove.description.config.local%"
+                    ],
+                    "default": "prod",
+                    "description": "%grove.description.config%"
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -98,6 +131,7 @@
     },
     "dependencies": {
         "cross-fetch": "^4.0.0",
-        "js-yaml": "^4.1.0"
+        "js-yaml": "^4.1.0",
+        "moment": "^2.29.4"
     }
 }

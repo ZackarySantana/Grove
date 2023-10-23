@@ -49,7 +49,7 @@ export class Client implements ClientType {
                     new Error(`Request failed with status ${response.status}`),
                 ];
             }
-            return [response.json() as T, undefined];
+            return [(await response.json()) as T, undefined];
         } catch (err) {
             if (err instanceof Error) {
                 return [undefined, err];
