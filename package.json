@@ -19,9 +19,48 @@
         "commands": [
             {
                 "command": "grove.helloWorld",
-                "title": "Hello World"
+                "title": "Hello World",
+                "icon": {
+                    "light": "media/resources/light/refresh.svg",
+                    "dark": "media/resources/dark/refresh.svg"
+                }
             }
-        ]
+        ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "grove",
+                    "title": "Grove",
+                    "icon": "media/resources/grove.svg"
+                }
+            ]
+        },
+        "views": {
+            "grove": [
+                {
+                    "id": "grove.patches",
+                    "name": "Open Patches"
+                },
+                {
+                    "id": "grove.test",
+                    "name": "Open test",
+                    "visibility": "collapsed"
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "grove.helloWorld",
+                    "when": "view == grove.patches",
+                    "group": "navigation"
+                },
+                {
+                    "command": "grove.helloWorld",
+                    "when": "view == grove.patches"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
