@@ -48,6 +48,12 @@
                 }
             ]
         },
+        "viewsWelcome": [
+            {
+                "view": "grove.patches",
+                "contents": "No open patches found.\n[Add Dependency](command:nodeDependencies.addEntry)"
+            }
+        ],
         "menus": {
             "view/title": [
                 {
