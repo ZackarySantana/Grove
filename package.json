@@ -3,6 +3,10 @@
     "displayName": "Grove",
     "description": "Streamline using Evergreen",
     "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ZackarySantana/Grove.git"
+    },
     "engines": {
         "vscode": "^1.83.0"
     },
