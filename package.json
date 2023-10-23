@@ -18,7 +18,7 @@
     "contributes": {
         "commands": [
             {
-                "command": "grove.helloWorld",
+                "command": "grove.helloWorld2",
                 "title": "Hello World",
                 "icon": {
                     "light": "media/resources/light/refresh.svg",
@@ -57,16 +57,22 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "grove.helloWorld",
+                    "command": "grove.helloWorld2",
                     "when": "view == grove.patches",
                     "group": "navigation"
                 },
                 {
-                    "command": "grove.helloWorld",
+                    "command": "grove.helloWorld2",
                     "when": "view == grove.patches"
                 }
             ]
-        }
+        },
+        "yamlValidation": [
+            {
+                "fileMatch": "**/self-tests.yml",
+                "url": "./schemas/self-tests.json"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
