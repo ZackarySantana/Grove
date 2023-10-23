@@ -13,13 +13,14 @@
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
         "noUnusedParameters": true,
-        "paths": {
-            "@pkg/*": ["src/pkg/*"],
-            "@constants": ["src/pkg/constants"],
-            "@evergreen/*": ["src/pkg/evergreen/*"],
-            "@client/*": ["src/client/*"],
-            "@client": ["src/client/client"],
-            "@types": ["src/types"]
-        }
+        "skipLibCheck": true
+        // "paths": {
+        //     "@pkg/*": ["src/pkg/*"],
+        //     "@constants": ["src/pkg/constants"],
+        //     "@evergreen/*": ["src/pkg/evergreen/*"],
+        //     "@client/*": ["src/client/*"],
+        //     "@client": ["src/client/client"],
+        //     "@types": ["src/types"]
+        // }
     }
 }

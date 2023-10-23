@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import { load } from "js-yaml";
-import { getConfig } from "@pkg/config";
-import { LOCAL_CONFIG, PROD_CONFIG, STAGING_CONFIG } from "@constants";
+import { getConfig } from "../config";
+import { LOCAL_CONFIG, PROD_CONFIG, STAGING_CONFIG } from "../constants";
 import { homedir } from "os";
-import { Either } from "@types";
+import { Either } from "../../types";
 
 export type API = {
     url: string;
@@ -42,6 +42,10 @@ export function getEvergreenConfigURI(): Either<string, Error> {
 
     return [uri.replace("~", homedir), undefined];
 }
+
+export const selfTestsSelector = {
+    pattern: "**/.github/workflows/*.{yaml,yml}",
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function requireOnObject<T = string>(obj: any, value: string): T {

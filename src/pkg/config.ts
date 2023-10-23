@@ -1,4 +1,4 @@
-import { Either } from "@types";
+import { Either } from "../types";
 import * as vscode from "vscode";
 
 export type GroveConfig = {

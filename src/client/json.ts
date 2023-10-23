@@ -1,4 +1,4 @@
-import { Client, ClientOptions, addHeaders } from "@client";
+import { Client, ClientOptions, addHeaders } from "./client";
 
 export class JSONClient extends Client {
     constructor(options: ClientOptions) {

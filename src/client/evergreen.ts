@@ -1,5 +1,5 @@
-import { JSONClient } from "@client/json";
-import { EvergreenConfig } from "@evergreen/config";
+import { JSONClient } from "../client/json";
+import { EvergreenConfig } from "../pkg/evergreen/config";
 
 export class EvergreenClient extends JSONClient {
     constructor(config: EvergreenConfig) {

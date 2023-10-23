@@ -1,4 +1,4 @@
-import { Either } from "@types";
+import { Either } from "../types";
 import fetch from "cross-fetch";
 
 export type ClientOptions = {
