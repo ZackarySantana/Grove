@@ -4,6 +4,7 @@ import { GroveContext } from "./types";
 import { getEvergreenConfig } from "./pkg/evergreen/config";
 import { createEvergreenContext } from "./pkg/evergreen/context";
 import { getWorkspaceFolder, showError } from "./pkg/utils";
+import { registerTreeNodes } from "./treenode/treenode";
 
 export async function activate(context: vscode.ExtensionContext) {
     const [evergreenConfig, configErr] = await getEvergreenConfig();
@@ -34,6 +35,7 @@ export async function activate(context: vscode.ExtensionContext) {
     } satisfies GroveContext;
 
     registerCommands(groveContext);
+    registerTreeNodes(groveContext);
 }
 
 // This method is called when your extension is deactivated

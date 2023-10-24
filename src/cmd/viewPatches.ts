@@ -1,15 +1,6 @@
-import moment = require("moment");
-import { showError } from "../pkg/utils";
+import { formatTime, showError } from "../pkg/utils";
 import { GroveContext } from "src/types";
 import * as vscode from "vscode";
-
-function finishedTime(finishTime: Date): string {
-    finishTime = new Date(finishTime);
-    if (finishTime.getFullYear() < 2000) {
-        return "Unfinished";
-    }
-    return moment(finishTime).fromNow();
-}
 
 export function initViewPatches(context: GroveContext): () => void {
     return async () => {
@@ -24,7 +15,10 @@ export function initViewPatches(context: GroveContext): () => void {
             description: p.Project,
             detail: `On: ${p.Project} | Status: ${
                 p.Status
-            } | Finished: ${finishedTime(p.FinishTime)}`,
+            } | Created: ${formatTime(
+                p.CreateTime,
+                "Not started",
+            )} | Finished: ${formatTime(p.FinishTime, "Not finished")}`,
             value: p.Id,
         }));
         const patch = await vscode.window.showQuickPick(options, {
@@ -33,6 +27,7 @@ export function initViewPatches(context: GroveContext): () => void {
         if (!patch) {
             return;
         }
+        console.log(patches);
 
         vscode.env.openExternal(
             vscode.Uri.parse(

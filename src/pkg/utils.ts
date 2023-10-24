@@ -1,3 +1,4 @@
+import moment = require("moment");
 import { Either } from "src/types";
 import * as vscode from "vscode";
 
@@ -17,4 +18,12 @@ export function showError(err: Error | string) {
     }
     vscode.window.showErrorMessage(err);
     console.error(err);
+}
+
+export function formatTime(finishTime: Date, invalid: string): string {
+    finishTime = new Date(finishTime);
+    if (finishTime.getFullYear() < 2000) {
+        return invalid;
+    }
+    return moment(finishTime).fromNow();
 }
