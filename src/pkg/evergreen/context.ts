@@ -1,4 +1,5 @@
-import { EvergreenClient } from "../../client/evergreen";
+import { LegacyEvergreenClient } from "../../client/legacyEvergreen";
+import { V2EvergreenClient } from "../../client/v2Evergreen";
 import { EvergreenConfig, EvergreenProject } from "./config";
 import type { Either } from "src/types";
 import { WorkspaceFolder } from "vscode";
@@ -7,7 +8,8 @@ export type EvergreenContext = {
     currentProject: EvergreenProject;
     config: EvergreenConfig;
     clients: {
-        legacy: EvergreenClient;
+        legacy: LegacyEvergreenClient;
+        v2: V2EvergreenClient;
     };
 };
 
@@ -35,7 +37,8 @@ export function createEvergreenContext(
             },
             config: evergreenConfig,
             clients: {
-                legacy: new EvergreenClient(evergreenConfig),
+                legacy: new LegacyEvergreenClient(evergreenConfig),
+                v2: new V2EvergreenClient(evergreenConfig),
             },
         } satisfies EvergreenContext,
         undefined,

@@ -21,6 +21,10 @@ export function initViewPatches(context: GroveContext): () => void {
             )} | Finished: ${formatTime(p.FinishTime, "Not finished")}`,
             value: p.Id,
         }));
+        console.log(patches);
+        console.log(
+            (await context.evergreen.clients.v2.getPatch(patches[0].Id))[0],
+        );
         const patch = await vscode.window.showQuickPick(options, {
             placeHolder: "Which patch would you like to open?",
         });
