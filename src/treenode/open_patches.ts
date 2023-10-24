@@ -7,11 +7,91 @@ import type { GroveContext } from "src/types";
 
 export class Patch extends vscode.TreeItem {
     constructor(
+        protected readonly context: GroveContext,
         public readonly desc: string,
         public readonly state: vscode.TreeItemCollapsibleState,
+        isParent: boolean,
     ) {
         super(desc, state);
-        this.resourceUri = vscode.Uri.parse("testing/this");
+        this.setResourceUri(desc, isParent);
+    }
+
+    setResourceUri(label: string, isParent: boolean) {
+        if (isParent) {
+            this.setResourceParentUri();
+            return;
+        }
+        this.setResourceDeletionUri(label);
+        this.setResourceAdditionUri(label);
+        this.setResourceStatusUri(label);
+        this.setResourceTimeUri(label);
+    }
+
+    setRU(path: string) {
+        this.resourceUri = vscode.Uri.joinPath(
+            this.context.vscode.extensionUri,
+            `media/resources/${path}.svg`,
+        );
+        this.iconPath = this.resourceUri;
+    }
+
+    setResourceParentUri() {
+        this.setRU("parent");
+    }
+
+    setResourceDeletionUri(label: string) {
+        if (label.includes("Deletions:")) {
+            this.setRU("deletions");
+            this.iconPath = new vscode.ThemeIcon(
+                "dash",
+                new vscode.ThemeColor("charts.red"),
+            );
+            this.label = this.desc.replace("Deletions: ", "");
+        }
+    }
+
+    setResourceAdditionUri(label: string) {
+        if (label.startsWith("Additions:")) {
+            this.setRU("additions");
+            this.iconPath = new vscode.ThemeIcon(
+                "terminal-new",
+                new vscode.ThemeColor("charts.green"),
+            );
+            this.label = this.desc.replace("Additions: ", "");
+        }
+    }
+
+    setResourceStatusUri(label: string) {
+        if (label.startsWith("Status:")) {
+            let color;
+            if (label.includes("success")) {
+                this.setRU("success");
+                color = new vscode.ThemeColor("charts.green");
+            }
+            if (label.includes("failed")) {
+                this.setRU("failed");
+                color = new vscode.ThemeColor("charts.red");
+            }
+            if (label.includes("created")) {
+                this.setRU("created");
+                color = new vscode.ThemeColor("charts.blue");
+            }
+            if (label.includes("started")) {
+                this.setRU("started");
+                color = new vscode.ThemeColor("charts.yellow");
+            }
+            this.iconPath = new vscode.ThemeIcon("circle-filled", color);
+        }
+    }
+
+    setResourceTimeUri(label: string) {
+        if (label.startsWith("Created:")) {
+            // this.iconPath = new vscode.ThemeIcon("play-circle");
+        }
+
+        if (label.startsWith("Finished:")) {
+            // this.iconPath = new vscode.ThemeIcon("stop-circle");
+        }
     }
 
     getChildren(): Patch[] {
@@ -21,14 +101,17 @@ export class Patch extends vscode.TreeItem {
 
 export class PatchChild extends Patch {
     constructor(
+        context: GroveContext,
         public readonly desc: string,
         public readonly children?: Patch[],
     ) {
         super(
+            context,
             desc,
             children && children.length > 0
                 ? vscode.TreeItemCollapsibleState.Expanded
                 : vscode.TreeItemCollapsibleState.None,
+            false,
         );
     }
 
@@ -41,8 +124,16 @@ export class PatchChild extends Patch {
 }
 
 export class PatchParent extends Patch {
-    constructor(public readonly patch: EvergreenPatch) {
-        super(patch?.Description, vscode.TreeItemCollapsibleState.Expanded);
+    constructor(
+        context: GroveContext,
+        public readonly patch: EvergreenPatch,
+    ) {
+        super(
+            context,
+            patch?.Description,
+            vscode.TreeItemCollapsibleState.Expanded,
+            true,
+        );
     }
 
     getChildren(): Patch[] {
@@ -50,25 +141,34 @@ export class PatchParent extends Patch {
             return [];
         }
         return [
-            new PatchChild(`Project: ${this.patch.Project}`),
-            new PatchChild(`Status: ${this.patch.Status}`),
+            new PatchChild(this.context, `Project: ${this.patch.Project}`),
+            new PatchChild(this.context, `Status: ${this.patch.Status}`),
             new PatchChild(
+                this.context,
                 `Created: ${formatTime(this.patch.CreateTime, "Not started")}`,
             ),
             new PatchChild(
+                this.context,
                 `Finished: ${formatTime(
                     this.patch.FinishTime,
                     "Not finished",
                 )}`,
             ),
             new PatchChild(
+                this.context,
                 `Changes`,
                 this.patch.Patches.flatMap((p) =>
                     p.PatchSet.Summary.flatMap(
                         (s) =>
-                            new PatchChild(s.Name, [
-                                new PatchChild(`Additions: ${s.Additions}`),
-                                new PatchChild(`Deletions: ${s.Deletions}`),
+                            new PatchChild(this.context, s.Name, [
+                                new PatchChild(
+                                    this.context,
+                                    `Additions: ${s.Additions}`,
+                                ),
+                                new PatchChild(
+                                    this.context,
+                                    `Deletions: ${s.Deletions}`,
+                                ),
                             ]),
                     ),
                 ),
@@ -96,7 +196,6 @@ export class OpenPatchesProvider extends ProviderWithContext<Patch> {
     }
 
     getChildren(patch?: Patch): Thenable<Patch[]> {
-        console.debug(patch);
         if (patch?.resourceUri) {
             this.fileDecoratorProvider.updateActiveEditor(patch?.resourceUri);
         }
@@ -107,7 +206,7 @@ export class OpenPatchesProvider extends ProviderWithContext<Patch> {
                     if (err !== undefined) {
                         throw err;
                     }
-                    return patches.map((p) => new PatchParent(p));
+                    return patches.map((p) => new PatchParent(this.context, p));
                 });
         }
         return Promise.resolve(patch.getChildren());

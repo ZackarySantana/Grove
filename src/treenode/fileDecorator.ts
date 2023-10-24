@@ -29,14 +29,37 @@ export class TreeFileDecorationProvider
     }
 
     provideFileDecoration(uri: Uri): FileDecoration | undefined {
-        console.debug("=====");
-        console.debug(uri);
-        if (uri.path === "/testing/this") {
-            return {
-                badge: "⇐",
+        const name = uri.path
+            .substring(uri.path.lastIndexOf("/") + 1)
+            .replace(".svg", "");
+        const decorators: { [key: string]: FileDecoration } = {
+            parent: {
+                color: new ThemeColor(""),
+            },
+            deletions: {
                 color: new ThemeColor("charts.red"),
-                // color: new vscode.ThemeColor("tab.activeBackground"),
-            };
+                // badge: "+12 -10",
+            },
+            additions: {
+                color: new ThemeColor("charts.green"),
+            },
+            success: {
+                color: new ThemeColor("charts.green"),
+            },
+            failed: {
+                color: new ThemeColor("charts.red"),
+            },
+            created: {
+                color: new ThemeColor("charts.blue"),
+            },
+            started: {
+                color: new ThemeColor("charts.yellow"),
+            },
+        };
+        for (const color in decorators) {
+            if (name === color) {
+                return decorators[color];
+            }
         }
         return undefined;
     }

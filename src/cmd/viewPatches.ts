@@ -27,8 +27,6 @@ export function initViewPatches(context: GroveContext): () => void {
         if (!patch) {
             return;
         }
-        console.log(patches);
-
         vscode.env.openExternal(
             vscode.Uri.parse(
                 `${context.evergreen.config.uiURL}/patch/${patch.value}?redirect_spruce_users=true`,

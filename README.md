@@ -4,7 +4,11 @@ Streamline your Evergreen experience and become an Evergreen super user.
 
 ## Features
 
--   Create patches ![Create patches](images/create-patches.png)
+-   View your open patches ![Open Patches](media/features/open_patches.png)
+
+### TBA
+
+-   Create patches ![Create patches](media/features)
 
 ## Requirements
 
