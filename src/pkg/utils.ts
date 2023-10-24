@@ -1,5 +1,5 @@
 import moment = require("moment");
-import { Either } from "src/types";
+import type { Either } from "src/types";
 import * as vscode from "vscode";
 
 export function getWorkspaceFolder(): Either<vscode.WorkspaceFolder, Error> {

@@ -1,6 +1,6 @@
 import { EvergreenClient } from "../../client/evergreen";
 import { EvergreenConfig, EvergreenProject } from "./config";
-import { Either } from "src/types";
+import type { Either } from "src/types";
 import { WorkspaceFolder } from "vscode";
 
 export type EvergreenContext = {

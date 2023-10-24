@@ -1,7 +1,7 @@
 import { JSONClient } from "./json";
-import { EvergreenConfig } from "src/pkg/evergreen/config";
-import { Patch } from "src/pkg/evergreen/types/patch";
-import { Either } from "src/types";
+import type { EvergreenConfig } from "src/pkg/evergreen/config";
+import type { Patch } from "src/pkg/evergreen/types/patch";
+import type { Either } from "src/types";
 
 export class EvergreenClient extends JSONClient {
     constructor(config: EvergreenConfig) {

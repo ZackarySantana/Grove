@@ -1,5 +1,5 @@
 import { formatTime, showError } from "../pkg/utils";
-import { GroveContext } from "src/types";
+import type { GroveContext } from "src/types";
 import * as vscode from "vscode";
 
 export function initViewPatches(context: GroveContext): () => void {
