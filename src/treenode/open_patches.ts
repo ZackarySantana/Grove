@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import { ProviderWithContext } from "./providerWithContext";
 import type { Patch as EvergreenPatch } from "src/pkg/evergreen/types/patch";
 import { formatTime } from "../pkg/utils";
+import { TreeFileDecorationProvider } from "./fileDecorator";
+import type { GroveContext } from "src/types";
 
 export class Patch extends vscode.TreeItem {
     constructor(
@@ -9,6 +11,7 @@ export class Patch extends vscode.TreeItem {
         public readonly state: vscode.TreeItemCollapsibleState,
     ) {
         super(desc, state);
+        this.resourceUri = vscode.Uri.parse("testing/this");
     }
 
     getChildren(): Patch[] {
@@ -75,6 +78,15 @@ export class PatchParent extends Patch {
 }
 
 export class OpenPatchesProvider extends ProviderWithContext<Patch> {
+    readonly fileDecoratorProvider: TreeFileDecorationProvider;
+
+    constructor(protected context: GroveContext) {
+        super(context);
+        this._disposables.push(
+            (this.fileDecoratorProvider = new TreeFileDecorationProvider()),
+        );
+    }
+
     refresh(): void {
         this._onDidChangeTreeData.fire();
     }
@@ -84,6 +96,10 @@ export class OpenPatchesProvider extends ProviderWithContext<Patch> {
     }
 
     getChildren(patch?: Patch): Thenable<Patch[]> {
+        console.debug(patch);
+        if (patch?.resourceUri) {
+            this.fileDecoratorProvider.updateActiveEditor(patch?.resourceUri);
+        }
         if (!patch) {
             return this.context.evergreen.clients.legacy
                 .getRecentPatches()
