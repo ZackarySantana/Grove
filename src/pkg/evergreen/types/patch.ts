@@ -1,5 +1,4 @@
-// v2 API /users/{user_id}/patches
-export type V2UserPatch = {
+export type V2Patch = {
     patch_id: string;
     description: string;
     project_id: string;
@@ -12,8 +11,8 @@ export type V2UserPatch = {
     version: string;
     status: string;
     create_time: string;
-    start_time: string;
-    finish_time: string;
+    start_time: string | null;
+    finish_time: string | null;
     builds: string[];
     tasks: string[];
     downstream_tasks: unknown;

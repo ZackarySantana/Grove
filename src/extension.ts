@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { registerCommands } from "./cmd/cmd";
-import { GroveContext } from "./types";
+import { GroveContext, Views } from "./types";
 import { getEvergreenConfig } from "./pkg/evergreen/config";
 import { createEvergreenContext } from "./pkg/evergreen/context";
 import { getWorkspaceFolder, showError } from "./pkg/utils";
@@ -32,6 +32,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode: context,
         evergreen: evergreenContext,
         workspaceFolder: workspaceFolder,
+        views: {} as Views,
     } satisfies GroveContext;
 
     registerCommands(groveContext);

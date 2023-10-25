@@ -1,6 +1,7 @@
 import { JSONClient } from "./json";
 import type { EvergreenConfig } from "src/pkg/evergreen/config";
-import type { LegacyPatch, V2UserPatch } from "src/pkg/evergreen/types/patch";
+import type { LegacyPatch, V2Patch } from "src/pkg/evergreen/types/patch";
+import { V2Version } from "src/pkg/evergreen/types/versions";
 import type { Either } from "src/types";
 
 export class V2EvergreenClient extends JSONClient {
@@ -14,10 +15,16 @@ export class V2EvergreenClient extends JSONClient {
         });
     }
 
-    public getUserPatches(
-        userId: string,
-    ): Promise<Either<V2UserPatch[], Error>> {
-        return this.get<V2UserPatch[]>(`/users/${userId}/patches`);
+    public getUserPatches(userId: string): Promise<Either<V2Patch[], Error>> {
+        return this.get<V2Patch[]>(`/users/${userId}/patches`);
+    }
+
+    public getProjectPatches(projectId: string) {
+        return this.get<V2Patch[]>(`/projects/${projectId}/patches`);
+    }
+
+    public getProjectVersions(projectId: string) {
+        return this.get<V2Version[]>(`/projects/${projectId}/versions`);
     }
 
     public getPatch(id: string): Promise<Either<LegacyPatch, Error>> {

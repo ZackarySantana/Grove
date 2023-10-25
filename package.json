@@ -18,6 +18,16 @@
     "contributes": {
         "commands": [
             {
+                "command": "grove.openPatch",
+                "title": "Open Patch",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.openVersion",
+                "title": "Open Version",
+                "category": "%grove.command.category%"
+            },
+            {
                 "command": "grove.viewPatches",
                 "title": "View Recent Patches",
                 "category": "%grove.command.category%"
@@ -26,7 +36,26 @@
                 "command": "grove.createPatch",
                 "title": "Create Patch",
                 "category": "%grove.command.category%",
-                "icon": "$(diff-review-insert)"
+                "icon": "$(plus)"
+            },
+            {
+                "command": "grove.copyText",
+                "title": "Copy given text"
+            },
+            {
+                "command": "grove.refreshRecentPatches",
+                "title": "Refresh Recent Patches",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "grove.refreshMainlineVersions",
+                "title": "Refresh Mainline Versions",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "grove.refreshOpenPatches",
+                "title": "Refresh Open Patches",
+                "icon": "$(refresh)"
             }
         ],
         "viewsContainers": {
@@ -41,40 +70,54 @@
         "views": {
             "grove": [
                 {
-                    "id": "grove.open_patches",
-                    "name": "Open Patches"
-                },
-                {
                     "id": "grove.recent_patches",
-                    "name": "Recent Patches",
-                    "visibility": "collapsed"
+                    "name": "Recent Patches"
                 },
                 {
-                    "id": "grove.mainline_patches",
-                    "name": "Mainline Patches",
+                    "id": "grove.mainline_versions",
+                    "name": "Mainline Versions"
+                },
+                {
+                    "id": "grove.open_patches",
+                    "name": "Open Patches",
                     "visibility": "collapsed"
                 }
             ]
         },
         "viewsWelcome": [
             {
-                "view": "grove.open_patches",
-                "contents": "No open patches found.\n[Create Patch](command:grove.createPatch)"
-            },
-            {
                 "view": "grove.recent_patches",
                 "contents": "No recent patches found. You should create one above!"
             },
             {
-                "view": "grove.mainline_patches",
-                "contents": "No mainline patches found. You should start creating on your mainline branch!"
+                "view": "grove.mainline_versions",
+                "contents": "No mainline versions found. You should start creating on your mainline branch!"
+            },
+            {
+                "view": "grove.open_patches",
+                "contents": "No open patches found.\n[Create Patch](command:grove.createPatch)"
             }
         ],
         "menus": {
             "view/title": [
                 {
-                    "command": "grove.createPatch",
+                    "command": "grove.refreshMainlineVersions",
+                    "when": "view == grove.mainline_versions",
+                    "group": "navigation"
+                },
+                {
+                    "command": "grove.refreshRecentPatches",
+                    "when": "view == grove.recent_patches",
+                    "group": "navigation"
+                },
+                {
+                    "command": "grove.refreshOpenPatches",
                     "when": "view == grove.open_patches",
+                    "group": "navigation"
+                },
+                {
+                    "command": "grove.createPatch",
+                    "when": "view == grove.recent_patches || view == grove.mainline_versions || view == grove.open_patches",
                     "group": "navigation"
                 }
             ]
