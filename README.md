@@ -4,6 +4,8 @@ Streamline your Evergreen experience and become an Evergreen super user.
 
 ## Features
 
+-   View your recent patches ![Recent Patches](media/features/recent_patches.png)
+-   View your project's versions (aka Mainline commits) ![Project Versions](media/features/mainline_versions.png)
 -   View your open patches ![Open Patches](media/features/open_patches.png)
 
 ### TBA
