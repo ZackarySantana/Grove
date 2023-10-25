@@ -117,7 +117,7 @@
                 },
                 {
                     "command": "grove.createPatch",
-                    "when": "view == grove.recent_patches || view == grove.mainline_versions || view == grove.open_patches",
+                    "when": "view == grove.recent_patches || view == grove.open_patches",
                     "group": "navigation"
                 }
             ]
