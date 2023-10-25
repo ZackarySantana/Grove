@@ -10,7 +10,8 @@ Streamline your Evergreen experience and become an Evergreen super user.
 
 ### TBA
 
--   Create patches ![Create patches](media/features)
+-   Evergreen test parsing
+-   View failed tests
 
 ## Requirements
 
