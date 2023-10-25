@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { ProviderWithContext } from "./providerWithContext";
-import type { Patch as EvergreenPatch } from "src/pkg/evergreen/types/patch";
+import type { V2UserPatch } from "src/pkg/evergreen/types/patch";
 import { formatTime } from "../pkg/utils";
 import { TreeFileDecorationProvider } from "./fileDecorator";
 import type { GroveContext } from "src/types";
@@ -126,11 +126,11 @@ export class PatchChild extends Patch {
 export class PatchParent extends Patch {
     constructor(
         context: GroveContext,
-        public readonly patch: EvergreenPatch,
+        public readonly patch: V2UserPatch,
     ) {
         super(
             context,
-            patch?.Description,
+            patch?.description,
             vscode.TreeItemCollapsibleState.Expanded,
             true,
         );
@@ -141,33 +141,39 @@ export class PatchParent extends Patch {
             return [];
         }
         return [
-            new PatchChild(this.context, `Project: ${this.patch.Project}`),
-            new PatchChild(this.context, `Status: ${this.patch.Status}`),
             new PatchChild(
                 this.context,
-                `Created: ${formatTime(this.patch.CreateTime, "Not started")}`,
+                `Project: ${this.patch.project_identifier}`,
+            ),
+            new PatchChild(this.context, `Status: ${this.patch.status}`),
+            new PatchChild(
+                this.context,
+                `Created: ${formatTime(
+                    new Date(this.patch.create_time),
+                    "Not started",
+                )}`,
             ),
             new PatchChild(
                 this.context,
                 `Finished: ${formatTime(
-                    this.patch.FinishTime,
+                    new Date(this.patch.finish_time),
                     "Not finished",
                 )}`,
             ),
             new PatchChild(
                 this.context,
                 `Changes`,
-                this.patch.Patches.flatMap((p) =>
-                    p.PatchSet.Summary.flatMap(
+                this.patch.module_code_changes.flatMap((p) =>
+                    p.file_diffs.flatMap(
                         (s) =>
-                            new PatchChild(this.context, s.Name, [
+                            new PatchChild(this.context, s.file_name, [
                                 new PatchChild(
                                     this.context,
-                                    `Additions: ${s.Additions}`,
+                                    `Additions: ${s.additions}`,
                                 ),
                                 new PatchChild(
                                     this.context,
-                                    `Deletions: ${s.Deletions}`,
+                                    `Deletions: ${s.deletions}`,
                                 ),
                             ]),
                     ),
@@ -200,8 +206,8 @@ export class OpenPatchesProvider extends ProviderWithContext<Patch> {
             this.fileDecoratorProvider.updateActiveEditor(patch?.resourceUri);
         }
         if (!patch) {
-            return this.context.evergreen.clients.legacy
-                .getRecentPatches()
+            return this.context.evergreen.clients.v2
+                .getUserPatches(this.context.evergreen.config.user)
                 .then(([patches, err]) => {
                     if (err !== undefined) {
                         throw err;
