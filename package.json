@@ -3,6 +3,8 @@
     "displayName": "Grove",
     "description": "Streamline using Evergreen",
     "version": "0.0.1",
+    "publisher": "ZackarySantana",
+    "author": "ZackarySantana",
     "repository": {
         "type": "git",
         "url": "https://github.com/ZackarySantana/Grove.git"

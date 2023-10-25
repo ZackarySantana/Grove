@@ -46,6 +46,14 @@ This extension contributes the following settings:
         -   `local`: `~/.evergreen-local.yml`
     -   Anything other than the options will be parsed as a file path.
 
+## Publishing
+
+Install
+
+```
+npm install -g @vscode/vsce
+```
+
 ## Known Issues
 
 We are bugless :)
