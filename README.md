@@ -4,9 +4,26 @@ Streamline your Evergreen experience and become an Evergreen super user.
 
 ## Features
 
--   View your recent patches ![Recent Patches](media/features/recent_patches.png)
--   View your project's versions (aka Mainline commits) ![Project Versions](media/features/mainline_versions.png)
--   View your open patches ![Open Patches](media/features/open_patches.png)
+-   View your recent patches
+    -   Perform different actions
+    -   Open it on the UI
+    -   View their status
+    -   Copy the git commit sha or other patch information
+    -   Look at the files that were changed
+    -   ![Recent Patches](media/features/recent_patches.png)
+-   View your project's versions (aka Mainline commits)
+    -   Perform different actions
+    -   Open it on the UI
+    -   View their status
+    -   Copy the git commit sha or other patch information
+    -   ![Project Versions](media/features/mainline_versions.png)
+-   View your open patches
+    -   Perform different actions
+    -   Open it on the UI
+    -   View their status
+    -   Copy the git commit sha or other patch information
+    -   Look at the files that were changed
+    -   ![Open Patches](media/features/open_patches.png)
 
 ### TBA
 
