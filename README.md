@@ -4,26 +4,24 @@ Streamline your Evergreen experience and become an Evergreen super user.
 
 ## Features
 
--   View your recent patches
+-   View your recent patches across projects, your current project's versions (aka mainline commits), or your open patches
     -   Perform different actions
-    -   Open it on the UI
-    -   View their status
-    -   Copy the git commit sha or other patch information
-    -   Look at the files that were changed
+        -   Restart, clone, abort the patch
+        -   Open on the UI
+        -   Checkout the commit the patch is based on
+    -   View different information
+        -   Status
+        -   Created/Finished dates
+        -   Patch id
+        -   Commit hash
+        -   Requester
+    -   Access the tasks of a Patch
+        -   View the task's status, logs, execution, task id
+        -   Open on the UI
+        -   Restart or abort the task
+    -   View which files and the amount of change to the files
+        -   Click the file name to be taken to the file
     -   ![Recent Patches](media/features/recent_patches.png)
--   View your project's versions (aka Mainline commits)
-    -   Perform different actions
-    -   Open it on the UI
-    -   View their status
-    -   Copy the git commit sha or other patch information
-    -   ![Project Versions](media/features/mainline_versions.png)
--   View your open patches
-    -   Perform different actions
-    -   Open it on the UI
-    -   View their status
-    -   Copy the git commit sha or other patch information
-    -   Look at the files that were changed
-    -   ![Open Patches](media/features/open_patches.png)
 
 ### TBA
 
@@ -31,7 +29,6 @@ Streamline your Evergreen experience and become an Evergreen super user.
 -   Checkout action
 -   Duplicate patches
 -   Evergreen test parsing
--   View failed tests
 
 ## Requirements
 
