@@ -159,7 +159,7 @@ export class V2EvergreenClient extends JSONClient {
         return this.get<V2Patch>(`/patches/${id}`);
     }
 
-    public restartPatch(id: string) {
-        return this.post<V2Patch>(`/patches/${id}/restart`, undefined);
+    public restartVersion(id: string) {
+        return this.post<V2Version>(`/versions/${id}/restart`, undefined);
     }
 }
