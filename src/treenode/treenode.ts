@@ -7,6 +7,7 @@ import { MainlinePatchesProvider } from "./versions/mainline_versions";
 import { Patch } from "./patches/patches";
 import { Version } from "./versions/versions";
 import { ProjectPatchesProvider } from "./patches/project_patches";
+import { Timer } from "../pkg/timer";
 
 export function registerTreeNodes(context: GroveContext) {
     context.views = {
@@ -20,9 +21,14 @@ export function registerTreeNodes(context: GroveContext) {
     ) as (keyof typeof context.views)[];
 
     treenames.forEach((treenode) => {
-        vscode.window.registerTreeDataProvider<Patch | Version>(
-            `grove.${treenode}`,
-            context.views[treenode],
+        context.vscode.subscriptions.push(
+            vscode.window.registerTreeDataProvider<Patch | Version>(
+                `grove.${treenode}`,
+                context.views[treenode],
+            ),
+        );
+        context.vscode.subscriptions.push(
+            new Timer(context.views[treenode].refresh, 60 * 1000),
         );
     });
 }
