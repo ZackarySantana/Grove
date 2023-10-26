@@ -17,6 +17,9 @@ import { initRestartVersion } from "./restartVersion";
 import { initRestartPatch } from "./restartPatch";
 import { initAbortVersion } from "./abortVersion";
 import { initAbortPatch } from "./abortPatch";
+import { initConfigurePatch } from "./configurePatch";
+import { initRestartTask } from "./restartTask";
+import { initAbortTask } from "./abortTask";
 
 export function registerCommands(context: GroveContext) {
     const cmds = {
@@ -31,8 +34,11 @@ export function registerCommands(context: GroveContext) {
         copyText: initCopyText,
         restartVersion: initRestartVersion,
         restartPatch: initRestartPatch,
+        restartTask: initRestartTask,
         abortVersion: initAbortVersion,
         abortPatch: initAbortPatch,
+        abortTask: initAbortTask,
+        configurePatch: initConfigurePatch,
         refreshRecentPatches: initRefreshRecentPatches,
         refreshProjectPatches: initRefreshProjectPatches,
         refreshMainlineVersions: initRefreshMainlineVersions,

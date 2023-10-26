@@ -35,6 +35,21 @@
                 "category": "%grove.command.category%"
             },
             {
+                "command": "grove.abortVersion",
+                "title": "Abort Version",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.abortPatch",
+                "title": "Abort Patch",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.abortTask",
+                "title": "Abort Task",
+                "category": "%grove.command.category%"
+            },
+            {
                 "command": "grove.restartVersion",
                 "title": "Restart Version",
                 "category": "%grove.command.category%"
@@ -42,6 +57,16 @@
             {
                 "command": "grove.restartPatch",
                 "title": "Restart Patch",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.restartTask",
+                "title": "Restart Task",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.configurePatch",
+                "title": "Configure Patch",
                 "category": "%grove.command.category%"
             },
             {

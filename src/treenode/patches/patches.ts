@@ -292,8 +292,34 @@ export class PatchParent extends Patch {
         return open;
     }
 
+    createTaskActionRestartChild(task: Task): PatchChild {
+        const restart = new PatchChild(this.context, `Restart`);
+        restart.command = {
+            title: "Restart this task",
+            command: "grove.restartTask",
+            arguments: [task.task_id, this.context.view],
+        };
+        restart.iconPath = new vscode.ThemeIcon("debug-restart");
+        return restart;
+    }
+
+    createTaskActionAbortChild(task: Task): PatchChild {
+        const abort = new PatchChild(this.context, `Abort`);
+        abort.command = {
+            title: "Abort this task",
+            command: "grove.abortTask",
+            arguments: [task.task_id, this.context.view],
+        };
+        abort.iconPath = new vscode.ThemeIcon("stop");
+        return abort;
+    }
+
     createTaskActionsChild(task: Task): PatchChild {
         const actions: PatchChild[] = [];
+        actions.push(this.createTaskActionRestartChild(task));
+        if (task.activated) {
+            actions.push(this.createTaskActionAbortChild(task));
+        }
         actions.push(this.createTaskActionOpenChild(task));
         const child = new PatchChild(
             this.context,

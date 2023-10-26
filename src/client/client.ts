@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { Either } from "../types";
 
 export type ClientOptions = {
@@ -45,6 +45,9 @@ export class Client implements ClientType {
             const response = await axios.request<T>(requestOptions);
             return [response.data, undefined];
         } catch (err) {
+            if (err instanceof AxiosError) {
+                return [undefined, err.response?.data ?? err];
+            }
             if (err instanceof Error) {
                 return [undefined, err];
             }
