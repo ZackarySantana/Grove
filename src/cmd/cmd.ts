@@ -9,12 +9,20 @@ import { initRefreshMainlineVersions } from "./refreshMainlinePatches";
 import { initOpenVersion } from "./openVersion";
 import { initOpenPatch } from "./openPatch";
 import { initRefreshProjectPatches } from "./refreshProjectPatches";
+import { initOpenTask } from "./openTask";
+import { initOpenLink } from "./openLink";
+import { initOpenFile } from "./openFile";
+import { initCheckoutCommit } from "./checkoutCommit";
 
 export function registerCommands(context: GroveContext) {
     const cmds = {
         viewPatches: initViewPatches,
         openVersion: initOpenVersion,
         openPatch: initOpenPatch,
+        openTask: initOpenTask,
+        openLink: initOpenLink,
+        openFile: initOpenFile,
+        checkoutCommit: initCheckoutCommit,
         createPatch: initCreatePatch,
         copyText: initCopyText,
         refreshRecentPatches: initRefreshRecentPatches,

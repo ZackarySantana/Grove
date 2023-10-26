@@ -1,11 +1,13 @@
+/* eslint-disable max-lines */
 import * as vscode from "vscode";
 import { ProviderWithContext } from "../providerWithContext";
-import type { V2Patch } from "src/pkg/evergreen/types/patch";
+import type { V2PatchWithVersionAndTasks } from "src/pkg/evergreen/types/patch";
 import { formatTime } from "../../pkg/utils";
 import { TreeFileDecorationProvider } from "../fileDecorator";
 import type { Either, GroveContext } from "src/types";
 import { getRequesterName } from "../../pkg/evergreen/requester";
-import { createCopyTextPatchChild } from "./helpers";
+import { createCopyTextPatchChild, createOpenLinkPatchChild } from "./helpers";
+import { Task } from "src/pkg/evergreen/types/task";
 
 export class Patch extends vscode.TreeItem {
     constructor(
@@ -131,7 +133,7 @@ export class PatchChild extends Patch {
 export class PatchParent extends Patch {
     constructor(
         context: GroveContext,
-        public readonly patch: V2Patch,
+        public readonly patch: V2PatchWithVersionAndTasks,
         private additionalDetails: () => PatchChild[],
     ) {
         super(
@@ -174,6 +176,17 @@ export class PatchParent extends Patch {
                 "Not finished",
             )}`,
         );
+    }
+
+    createActionsCheckoutChild(): PatchChild {
+        const start = new PatchChild(this.context, `Checkout Commit`);
+        start.command = {
+            title: "Checkout commit",
+            command: "grove.checkoutCommit",
+            arguments: [this.patch.git_hash],
+        };
+        start.iconPath = new vscode.ThemeIcon("git-branch");
+        return start;
     }
 
     createActionStartChild(): PatchChild {
@@ -231,6 +244,7 @@ export class PatchParent extends Patch {
             }
         }
         actions.push(this.createActionOpenChild());
+        actions.push(this.createActionsCheckoutChild());
         const child = new PatchChild(
             this.context,
             `Actions`,
@@ -240,14 +254,122 @@ export class PatchParent extends Patch {
         return child;
     }
 
+    createTaskActionOpenChild(task: Task): PatchChild {
+        const open = new PatchChild(this.context, `View on UI`);
+        open.command = {
+            title: "View on UI",
+            command: "grove.openTask",
+            arguments: [task.task_id],
+        };
+        open.iconPath = new vscode.ThemeIcon("link");
+        return open;
+    }
+
+    createTaskActionsChild(task: Task): PatchChild {
+        const actions: PatchChild[] = [];
+        actions.push(this.createTaskActionOpenChild(task));
+        const child = new PatchChild(
+            this.context,
+            `Actions`,
+            actions,
+            vscode.TreeItemCollapsibleState.Collapsed,
+        );
+        return child;
+    }
+
+    createTaskLogsChild(task: Task): PatchChild {
+        const logs: PatchChild[] = [];
+        logs.push(
+            createOpenLinkPatchChild(
+                this.context,
+                "Open All",
+                task.parsley_logs.all_log,
+            ),
+        );
+        logs.push(
+            createOpenLinkPatchChild(
+                this.context,
+                "Open Task",
+                task.parsley_logs.task_log,
+            ),
+        );
+        logs.push(
+            createOpenLinkPatchChild(
+                this.context,
+                "Open Agent",
+                task.parsley_logs.agent_log,
+            ),
+        );
+        logs.push(
+            createOpenLinkPatchChild(
+                this.context,
+                "Open System",
+                task.parsley_logs.system_log,
+            ),
+        );
+        logs.forEach(
+            (c) =>
+                (c.iconPath = new vscode.ThemeIcon("ports-open-browser-icon")),
+        );
+        const child = new PatchChild(
+            this.context,
+            `Logs`,
+            logs,
+            vscode.TreeItemCollapsibleState.Collapsed,
+        );
+        return child;
+    }
+
+    createTaskChild(task: Task): PatchChild {
+        const taskChild = new PatchChild(
+            this.context,
+            `${task.display_name}`,
+            [
+                new PatchChild(this.context, `Status: ${task.status}`),
+                this.createTaskActionsChild(task),
+                this.createTaskLogsChild(task),
+                new PatchChild(this.context, `Task Details`, [
+                    createCopyTextPatchChild(
+                        this.context,
+                        `Task Id: %s`,
+                        task.task_id,
+                    ),
+                    createCopyTextPatchChild(
+                        this.context,
+                        `Execution: %s`,
+                        String(task.execution),
+                    ),
+                ]),
+            ],
+            vscode.TreeItemCollapsibleState.Collapsed,
+        );
+
+        taskChild.setResourceStatusUri(`Status: ${task.status}`);
+
+        return taskChild;
+    }
+
+    createTasksChild(): PatchChild {
+        return new PatchChild(
+            this.context,
+            `Tasks`,
+            [
+                ...(this.patch.versionAndTasks?.tasks.map((t) =>
+                    this.createTaskChild(t),
+                ) ?? []),
+            ],
+            vscode.TreeItemCollapsibleState.Collapsed,
+        );
+    }
+
     createDetailsChild(): PatchChild {
         return new PatchChild(
             this.context,
-            `Details`,
+            `Patch Details`,
             [
                 createCopyTextPatchChild(
                     this.context,
-                    `Id: %s`,
+                    `Patch Id: %s`,
                     this.patch.patch_id,
                 ),
                 createCopyTextPatchChild(
@@ -257,13 +379,24 @@ export class PatchParent extends Patch {
                 ),
                 createCopyTextPatchChild(
                     this.context,
-                    `Commit: ${this.patch.git_hash}`,
+                    `Commit: %s`,
                     this.patch.git_hash,
                 ),
                 ...this.additionalDetails(),
             ],
             vscode.TreeItemCollapsibleState.Collapsed,
         );
+    }
+
+    createOpenFileChild(label: string, fileName: string): PatchChild {
+        const child = new PatchChild(this.context, label);
+        child.command = {
+            title: "Open file",
+            command: "grove.openFile",
+            arguments: [fileName],
+        };
+        child.iconPath = new vscode.ThemeIcon("open-editors-view-icon");
+        return child;
     }
 
     createChangesChild(): PatchChild {
@@ -274,6 +407,7 @@ export class PatchParent extends Patch {
                 p.file_diffs.flatMap(
                     (s) =>
                         new PatchChild(this.context, s.file_name, [
+                            this.createOpenFileChild("Open File", s.file_name),
                             new PatchChild(
                                 this.context,
                                 `Additions: ${s.additions}`,
@@ -298,6 +432,7 @@ export class PatchParent extends Patch {
             this.createCreatedChild(),
             this.createFinishedChild(),
             this.createActionsChild(),
+            this.createTasksChild(),
             this.createDetailsChild(),
             this.createChangesChild(),
         ];
@@ -307,9 +442,13 @@ export class PatchParent extends Patch {
 export class PatchesProvider extends ProviderWithContext<Patch> {
     readonly fileDecoratorProvider: TreeFileDecorationProvider;
 
-    protected retrievePatches: () => Thenable<Either<V2Patch[], Error>>;
-    protected filter: (patch: V2Patch) => boolean;
-    protected additionalDetails: (patch: V2Patch) => PatchChild[];
+    protected retrievePatches: () => Thenable<
+        Either<V2PatchWithVersionAndTasks[], Error>
+    >;
+    protected filter: (patch: V2PatchWithVersionAndTasks) => boolean;
+    protected additionalDetails: (
+        patch: V2PatchWithVersionAndTasks,
+    ) => PatchChild[];
 
     constructor(protected context: GroveContext) {
         super(context);
@@ -317,7 +456,7 @@ export class PatchesProvider extends ProviderWithContext<Patch> {
             (this.fileDecoratorProvider = new TreeFileDecorationProvider()),
         );
         this.retrievePatches = () =>
-            context.evergreen.clients.v2.getUserPatches(
+            context.evergreen.clients.v2.getUserPatchesWithBuildsAndTasks(
                 context.evergreen.config.user,
             );
         this.filter = () => true;

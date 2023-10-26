@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { ProviderWithContext } from "../providerWithContext";
-import type { V2Version } from "src/pkg/evergreen/types/versions";
+import type { V2Version } from "src/pkg/evergreen/types/version";
 import { formatTime } from "../../pkg/utils";
 import { TreeFileDecorationProvider } from "../fileDecorator";
 import type { Either, GroveContext } from "src/types";

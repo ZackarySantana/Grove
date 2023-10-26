@@ -1,3 +1,5 @@
+import { Task } from "./task";
+
 export type V2Version = {
     version_id: string;
     create_time: string;
@@ -24,4 +26,8 @@ export type V2Version = {
     aborted: boolean;
     git_tags: unknown;
     ignored: boolean;
+};
+
+export type V2VersionAndTasks = V2Version & {
+    tasks: Task[];
 };

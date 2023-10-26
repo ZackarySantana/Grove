@@ -1,3 +1,5 @@
+import { V2VersionAndTasks } from "./version";
+
 export type V2Patch = {
     patch_id: string;
     description: string;
@@ -50,6 +52,10 @@ export type V2Patch = {
     child_patches: unknown;
     requester: string;
     merged_from: string;
+};
+
+export type V2PatchWithVersionAndTasks = V2Patch & {
+    versionAndTasks?: V2VersionAndTasks;
 };
 
 // legacy API /patches/mine?n=x

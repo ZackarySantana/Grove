@@ -14,3 +14,17 @@ export function createCopyTextPatchChild(
     };
     return child;
 }
+
+export function createOpenLinkPatchChild(
+    context: GroveContext,
+    label: string,
+    link: string,
+): PatchChild {
+    const child = new PatchChild(context, label);
+    child.command = {
+        command: "grove.openLink",
+        title: label,
+        arguments: [link],
+    };
+    return child;
+}

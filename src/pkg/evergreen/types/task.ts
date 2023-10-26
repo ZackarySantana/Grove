@@ -1,0 +1,86 @@
+export type Task = {
+    task_id: string;
+    project_id: string;
+    project_identifier: string;
+    create_time: string;
+    dispatch_time: null;
+    scheduled_time: null;
+    container_allocated_time: null;
+    start_time: null;
+    finish_time: null;
+    ingest_time: string;
+    activated_time: null;
+    version_id: string;
+    revision: string;
+    priority: number;
+    activated: boolean;
+    activated_by: string;
+    container_allocated: boolean;
+    container_allocation_attempts: number;
+    build_id: string;
+    distro_id: string;
+    container: string;
+    container_options: {
+        cpu: number;
+        memory_mb: number;
+        working_dir: string;
+        image: string;
+        os: string;
+        arch: string;
+        windows_version: string;
+    };
+    build_variant: string;
+    build_variant_display_name: string;
+    depends_on: null;
+    display_name: string;
+    host_id: string;
+    pod_id: string;
+    execution: number;
+    order: number;
+    status: string;
+    display_status: string;
+    status_details: {
+        status: string;
+        type: string;
+        desc: string;
+        timed_out: boolean;
+        timeout_type: string;
+        oom_tracker_info: {
+            detected: boolean;
+            pids: null;
+        };
+        trace_id: string;
+    };
+    logs: {
+        all_log: string;
+        task_log: string;
+        agent_log: string;
+        system_log: string;
+        event_log: string;
+    };
+    parsley_logs: {
+        all_log: string;
+        task_log: string;
+        agent_log: string;
+        system_log: string;
+    };
+    time_taken_ms: number;
+    expected_duration_ms: number;
+    est_wait_to_start_ms: number;
+    generate_task: boolean;
+    generated_by: string;
+    artifacts: null;
+    display_only: boolean;
+    parent_task_id: string;
+    mainline: boolean;
+    blocked: boolean;
+    requester: string;
+    test_results: null;
+    aborted: boolean;
+    abort_info: unknown;
+    sync_at_end_opts: {
+        enabled: boolean;
+        statuses: null;
+        timeout: number;
+    };
+};

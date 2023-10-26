@@ -25,6 +25,21 @@
                 "category": "%grove.command.category%"
             },
             {
+                "command": "grove.openTask",
+                "title": "Open Task",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.openFile",
+                "title": "Open File",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.checkoutCommit",
+                "title": "Checkout Commit",
+                "category": "%grove.command.category%"
+            },
+            {
                 "command": "grove.openVersion",
                 "title": "Open Version",
                 "category": "%grove.command.category%"

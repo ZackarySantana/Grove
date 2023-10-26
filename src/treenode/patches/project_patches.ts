@@ -7,7 +7,7 @@ export class ProjectPatchesProvider extends PatchesProvider {
     constructor(context: GroveContext) {
         super(context);
         this.retrievePatches = () =>
-            context.evergreen.clients.v2.getProjectPatches(
+            context.evergreen.clients.v2.getProjectPatchesWithBuildsAndTasks(
                 context.evergreen.currentProject.id,
             );
 
