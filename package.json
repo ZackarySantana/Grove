@@ -193,7 +193,7 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "cross-fetch": "^4.0.0",
+        "axios": "^1.5.1",
         "js-yaml": "^4.1.0",
         "moment": "^2.29.4"
     }

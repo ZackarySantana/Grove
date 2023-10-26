@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { JSONClient } from "./json";
 import type { EvergreenConfig } from "src/pkg/evergreen/config";
 import type { V2Patch } from "src/pkg/evergreen/types/patch";
@@ -23,7 +24,11 @@ export class V2EvergreenClient extends JSONClient {
     }
 
     public getProjectVersions(projectId: string) {
-        return this.get<V2Version[]>(`/projects/${projectId}/versions`);
+        return this.get<V2Version[]>(`/projects/${projectId}/versions`, {
+            // Currently there is a bug in Evergreen that the tasks don't properly get included.
+            include_builds: true,
+            include_tasks: true,
+        });
     }
 
     public getPatch(id: string) {

@@ -1,5 +1,5 @@
+import axios, { AxiosRequestConfig } from "axios";
 import { Either } from "../types";
-import fetch from "cross-fetch";
 
 export type ClientOptions = {
     baseURL: string;
@@ -31,25 +31,19 @@ export class Client implements ClientType {
         method: string,
         data?: unknown,
     ): Promise<Either<T, Error>> {
-        const url = `${this.baseURL}${path}`;
-        const requestOptions: RequestInit = {
+        const requestOptions: AxiosRequestConfig = {
+            url: `${this.baseURL}${path}`,
             method,
             headers: {
                 "Content-Type": "application/json",
                 ...this.headers,
             },
-            body: data ? JSON.stringify(data) : undefined,
+            data: data ? JSON.stringify(data) : undefined,
         };
 
         try {
-            const response = await fetch(url, requestOptions);
-            if (!response.ok) {
-                return [
-                    undefined,
-                    new Error(`Request failed with status ${response.status}`),
-                ];
-            }
-            return [(await response.json()) as T, undefined];
+            const response = await axios.request<T>(requestOptions);
+            return [response.data, undefined];
         } catch (err) {
             if (err instanceof Error) {
                 return [undefined, err];
@@ -58,8 +52,8 @@ export class Client implements ClientType {
         }
     }
 
-    async get<T>(path: string): Promise<Either<T, Error>> {
-        return this.makeRequest<T>(path, "GET");
+    async get<T>(path: string, data?: unknown): Promise<Either<T, Error>> {
+        return this.makeRequest<T>(path, "GET", data);
     }
 
     async post<T>(path: string, data: unknown): Promise<Either<T, Error>> {
