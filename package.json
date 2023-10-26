@@ -55,6 +55,11 @@
                 "icon": "$(refresh)"
             },
             {
+                "command": "grove.refreshProjectPatches",
+                "title": "Refresh Project Patches",
+                "icon": "$(refresh)"
+            },
+            {
                 "command": "grove.refreshOpenPatches",
                 "title": "Refresh Open Patches",
                 "icon": "$(refresh)"
@@ -80,6 +85,10 @@
                     "name": "Mainline Versions"
                 },
                 {
+                    "id": "grove.project_patches",
+                    "name": "Project Patches"
+                },
+                {
                     "id": "grove.open_patches",
                     "name": "Open Patches",
                     "visibility": "collapsed"
@@ -96,20 +105,29 @@
                 "contents": "No mainline versions found. You should start creating on your mainline branch!"
             },
             {
+                "view": "grove.project_patches",
+                "contents": "No project patches found. You should start making patches on your project!"
+            },
+            {
                 "view": "grove.open_patches",
-                "contents": "No open patches found.\n[Create Patch](command:grove.createPatch)"
+                "contents": "No open patches found."
             }
         ],
         "menus": {
             "view/title": [
+                {
+                    "command": "grove.refreshRecentPatches",
+                    "when": "view == grove.recent_patches",
+                    "group": "navigation"
+                },
                 {
                     "command": "grove.refreshMainlineVersions",
                     "when": "view == grove.mainline_versions",
                     "group": "navigation"
                 },
                 {
-                    "command": "grove.refreshRecentPatches",
-                    "when": "view == grove.recent_patches",
+                    "command": "grove.refreshProjectPatches",
+                    "when": "view == grove.project_patches",
                     "group": "navigation"
                 },
                 {

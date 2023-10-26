@@ -8,6 +8,7 @@ import { initRefreshRecentPatches } from "./refreshRecentPatches";
 import { initRefreshMainlineVersions } from "./refreshMainlinePatches";
 import { initOpenVersion } from "./openVersion";
 import { initOpenPatch } from "./openPatch";
+import { initRefreshProjectPatches } from "./refreshProjectPatches";
 
 export function registerCommands(context: GroveContext) {
     const cmds = {
@@ -17,6 +18,7 @@ export function registerCommands(context: GroveContext) {
         createPatch: initCreatePatch,
         copyText: initCopyText,
         refreshRecentPatches: initRefreshRecentPatches,
+        refreshProjectPatches: initRefreshProjectPatches,
         refreshMainlineVersions: initRefreshMainlineVersions,
         refreshOpenPatches: initRefreshOpenPatches,
     };

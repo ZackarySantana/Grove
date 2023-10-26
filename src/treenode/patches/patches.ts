@@ -5,6 +5,7 @@ import { formatTime } from "../../pkg/utils";
 import { TreeFileDecorationProvider } from "../fileDecorator";
 import type { Either, GroveContext } from "src/types";
 import { getRequesterName } from "../../pkg/evergreen/requester";
+import { createCopyTextPatchChild } from "./helpers";
 
 export class Patch extends vscode.TreeItem {
     constructor(
@@ -131,6 +132,7 @@ export class PatchParent extends Patch {
     constructor(
         context: GroveContext,
         public readonly patch: V2Patch,
+        private additionalDetails: () => PatchChild[],
     ) {
         super(
             context,
@@ -239,31 +241,26 @@ export class PatchParent extends Patch {
     }
 
     createDetailsChild(): PatchChild {
-        const createDetail = (label: string, textToCopy: string) => {
-            const detail = new PatchChild(
-                this.context,
-                label.replace("%s", textToCopy),
-            );
-            detail.command = {
-                command: "grove.copyText",
-                title: "Copy Text",
-                arguments: [textToCopy],
-            };
-            return detail;
-        };
         return new PatchChild(
             this.context,
             `Details`,
             [
-                createDetail(`Id: %s`, this.patch.patch_id),
-                createDetail(
+                createCopyTextPatchChild(
+                    this.context,
+                    `Id: %s`,
+                    this.patch.patch_id,
+                ),
+                createCopyTextPatchChild(
+                    this.context,
                     `Requester: ${getRequesterName(this.patch.requester)}`,
                     this.patch.requester,
                 ),
-                createDetail(
+                createCopyTextPatchChild(
+                    this.context,
                     `Commit: ${this.patch.git_hash}`,
                     this.patch.git_hash,
                 ),
+                ...this.additionalDetails(),
             ],
             vscode.TreeItemCollapsibleState.Collapsed,
         );
@@ -312,6 +309,7 @@ export class PatchesProvider extends ProviderWithContext<Patch> {
 
     protected retrievePatches: () => Thenable<Either<V2Patch[], Error>>;
     protected filter: (patch: V2Patch) => boolean;
+    protected additionalDetails: (patch: V2Patch) => PatchChild[];
 
     constructor(protected context: GroveContext) {
         super(context);
@@ -323,6 +321,7 @@ export class PatchesProvider extends ProviderWithContext<Patch> {
                 context.evergreen.config.user,
             );
         this.filter = () => true;
+        this.additionalDetails = () => [];
     }
 
     refresh(): void {
@@ -344,7 +343,12 @@ export class PatchesProvider extends ProviderWithContext<Patch> {
                 }
                 return patches
                     .filter(this.filter)
-                    .map((p) => new PatchParent(this.context, p));
+                    .map(
+                        (p) =>
+                            new PatchParent(this.context, p, () =>
+                                this.additionalDetails(p),
+                            ),
+                    );
             });
         }
         return Promise.resolve(patch.getChildren());
