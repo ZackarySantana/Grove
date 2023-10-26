@@ -5,6 +5,7 @@ import { window } from "vscode";
 
 export function initCheckoutCommit(context: GroveContext) {
     return async (commitHash: string) => {
+        window.showInformationMessage(`Checking out ${commitHash}`);
         exec(
             `git fetch --all && git checkout ${commitHash}`,
             {
@@ -18,9 +19,7 @@ export function initCheckoutCommit(context: GroveContext) {
                         `We could not checkout that commit, are you in the right project? ${err}`,
                     );
                 } else {
-                    window.showInformationMessage(
-                        `You have checked out ${commitHash}`,
-                    );
+                    window.showInformationMessage(`Checked out ${commitHash}`);
                 }
             },
         );

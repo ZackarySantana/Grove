@@ -35,6 +35,16 @@
                 "category": "%grove.command.category%"
             },
             {
+                "command": "grove.restartVersion",
+                "title": "Restart Version",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.restartPatch",
+                "title": "Restart Patch",
+                "category": "%grove.command.category%"
+            },
+            {
                 "command": "grove.checkoutCommit",
                 "title": "Checkout Commit",
                 "category": "%grove.command.category%"

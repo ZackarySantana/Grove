@@ -1,8 +1,7 @@
-import { GroveContext } from "src/types";
-import { PatchChild } from "./patches";
+import { PatchChild, PatchTreeItemContext } from "./patches";
 
 export function createCopyTextPatchChild(
-    context: GroveContext,
+    context: PatchTreeItemContext,
     label: string,
     textToCopy: string,
 ): PatchChild {
@@ -16,7 +15,7 @@ export function createCopyTextPatchChild(
 }
 
 export function createOpenLinkPatchChild(
-    context: GroveContext,
+    context: PatchTreeItemContext,
     label: string,
     link: string,
 ): PatchChild {

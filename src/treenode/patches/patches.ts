@@ -9,9 +9,13 @@ import { getRequesterName } from "../../pkg/evergreen/requester";
 import { createCopyTextPatchChild, createOpenLinkPatchChild } from "./helpers";
 import { Task } from "src/pkg/evergreen/types/task";
 
+export type PatchTreeItemContext = GroveContext & {
+    view: ProviderWithContext<unknown>;
+};
+
 export class Patch extends vscode.TreeItem {
     constructor(
-        protected readonly context: GroveContext,
+        protected readonly context: PatchTreeItemContext,
         public readonly desc: string,
         public readonly state: vscode.TreeItemCollapsibleState,
         isParent: boolean,
@@ -105,7 +109,7 @@ export class Patch extends vscode.TreeItem {
 
 export class PatchChild extends Patch {
     constructor(
-        context: GroveContext,
+        context: PatchTreeItemContext,
         public readonly desc: string,
         public readonly children?: Patch[],
         state?: vscode.TreeItemCollapsibleState,
@@ -132,7 +136,7 @@ export class PatchChild extends Patch {
 
 export class PatchParent extends Patch {
     constructor(
-        context: GroveContext,
+        context: PatchTreeItemContext,
         public readonly patch: V2PatchWithVersionAndTasks,
         private additionalDetails: () => PatchChild[],
     ) {
@@ -160,6 +164,19 @@ export class PatchParent extends Patch {
             this.context,
             `Created: ${formatTime(
                 new Date(this.patch.create_time),
+                "Not started",
+            )}`,
+        );
+    }
+
+    createStartedChild(): PatchChild {
+        if (this.patch.start_time === null) {
+            return new PatchChild(this.context, `Started: Not started`);
+        }
+        return new PatchChild(
+            this.context,
+            `Started: ${formatTime(
+                new Date(this.patch.start_time),
                 "Not started",
             )}`,
         );
@@ -194,7 +211,7 @@ export class PatchParent extends Patch {
         start.command = {
             title: "Start this patch",
             command: "grove.startPatch",
-            arguments: [this.patch.patch_id],
+            arguments: [this.patch.patch_id, this.context.view],
         };
         start.iconPath = new vscode.ThemeIcon("play");
         return start;
@@ -204,22 +221,22 @@ export class PatchParent extends Patch {
         const abort = new PatchChild(this.context, `Abort`);
         abort.command = {
             title: "Abort this patch",
-            command: "grove.stopPatch",
-            arguments: [this.patch.patch_id],
+            command: "grove.abortPatch",
+            arguments: [this.patch.patch_id, this.context.view],
         };
         abort.iconPath = new vscode.ThemeIcon("stop");
         return abort;
     }
 
     createActionRestartChild(): PatchChild {
-        const abort = new PatchChild(this.context, `Restart`);
-        abort.command = {
+        const restart = new PatchChild(this.context, `Restart`);
+        restart.command = {
             title: "Restart this patch",
             command: "grove.restartPatch",
-            arguments: [this.patch.patch_id],
+            arguments: [this.patch.patch_id, this.context.view],
         };
-        abort.iconPath = new vscode.ThemeIcon("debug-restart");
-        return abort;
+        restart.iconPath = new vscode.ThemeIcon("debug-restart");
+        return restart;
     }
 
     createActionOpenChild(): PatchChild {
@@ -233,17 +250,27 @@ export class PatchParent extends Patch {
         return open;
     }
 
+    createActionConfigureChild(): PatchChild {
+        const open = new PatchChild(this.context, `Configure`);
+        open.command = {
+            title: "Configure",
+            command: "grove.configurePatch",
+            arguments: [this.patch.patch_id, this.context.view],
+        };
+        open.iconPath = new vscode.ThemeIcon("settings-gear");
+        return open;
+    }
+
     createActionsChild(): PatchChild {
         const actions: PatchChild[] = [];
         if (!this.patch.activated) {
             actions.push(this.createActionStartChild());
         } else {
+            actions.push(this.createActionOpenChild());
             actions.push(this.createActionRestartChild());
-            if (this.patch.finish_time === null) {
-                actions.push(this.createActionAbortChild());
-            }
         }
-        actions.push(this.createActionOpenChild());
+        actions.push(this.createActionAbortChild());
+        actions.push(this.createActionConfigureChild());
         actions.push(this.createActionsCheckoutChild());
         const child = new PatchChild(
             this.context,
@@ -430,6 +457,7 @@ export class PatchParent extends Patch {
             this.createProjectChild(),
             this.createStatusChild(),
             this.createCreatedChild(),
+            this.createStartedChild(),
             this.createFinishedChild(),
             this.createActionsChild(),
             this.createTasksChild(),
@@ -449,6 +477,7 @@ export class PatchesProvider extends ProviderWithContext<Patch> {
     protected additionalDetails: (
         patch: V2PatchWithVersionAndTasks,
     ) => PatchChild[];
+    protected contextWithView: PatchTreeItemContext;
 
     constructor(protected context: GroveContext) {
         super(context);
@@ -461,6 +490,7 @@ export class PatchesProvider extends ProviderWithContext<Patch> {
             );
         this.filter = () => true;
         this.additionalDetails = () => [];
+        this.contextWithView = { ...this.context, view: this };
     }
 
     refresh(): void {
@@ -484,7 +514,7 @@ export class PatchesProvider extends ProviderWithContext<Patch> {
                     .filter(this.filter)
                     .map(
                         (p) =>
-                            new PatchParent(this.context, p, () =>
+                            new PatchParent(this.contextWithView, p, () =>
                                 this.additionalDetails(p),
                             ),
                     );

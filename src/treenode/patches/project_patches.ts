@@ -14,7 +14,7 @@ export class ProjectPatchesProvider extends PatchesProvider {
         this.additionalDetails = (patch: V2Patch) => {
             return [
                 createCopyTextPatchChild(
-                    context,
+                    this.contextWithView,
                     `Author: ${patch.author}`,
                     patch.author,
                 ),
