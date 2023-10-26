@@ -26,7 +26,8 @@ Streamline your Evergreen experience and become an Evergreen super user.
 ### TBA
 
 -   Create patches
--   Checkout action
+-   Configure patches and finalize to versions
+-   Learn more pages (welcome page when you install?)
 -   Duplicate patches
 -   Evergreen test parsing
 
