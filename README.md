@@ -5,13 +5,15 @@ Streamline your Evergreen experience and become an Evergreen super user.
 ## Features
 
 -   View your recent patches across projects, your current project's versions (aka mainline commits), or your open patches
+
     -   Perform different actions
-        -   Restart, clone, abort the patch
+        -   Restart, clone, abort, configure the patch
         -   Open on the UI
         -   Checkout the commit the patch is based on
     -   View different information
         -   Status
         -   Created/Finished dates
+    -   View detailed information (and copy them by clicking!)
         -   Patch id
         -   Commit hash
         -   Requester
@@ -23,12 +25,14 @@ Streamline your Evergreen experience and become an Evergreen super user.
         -   Click the file name to be taken to the file
     -   ![Recent Patches](media/features/recent_patches.png)
 
+-   Create a patch
+    -   Define custom patch commands or walkthrough and create a patch
+-   Configure patches and finalize them to versions (aka they will now run the tasks)
+
 ### TBA
 
--   Create patches
--   Configure patches and finalize to versions
--   Learn more pages (welcome page when you install?)
 -   Duplicate patches
+-   Learn more pages (welcome page when you install?)
 -   Evergreen test parsing
 
 ## Requirements
