@@ -312,7 +312,10 @@ export class PatchParent extends Patch {
     createTaskActionsChild(task: Task): PatchChild {
         const actions: PatchChild[] = [];
         actions.push(this.createTaskActionRestartChild(task));
-        if (task.activated) {
+        if (
+            task.activated &&
+            (task.status === "started" || task.status === "dispatched")
+        ) {
             actions.push(this.createTaskActionAbortChild(task));
         }
         actions.push(this.createTaskActionOpenChild(task));
