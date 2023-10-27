@@ -255,7 +255,7 @@ export class PatchParent extends Patch {
         open.command = {
             title: "Configure",
             command: "grove.configurePatch",
-            arguments: [this.patch.patch_id, this.context.view],
+            arguments: [this.patch, this.context.view],
         };
         open.iconPath = new vscode.ThemeIcon("settings-gear");
         return open;

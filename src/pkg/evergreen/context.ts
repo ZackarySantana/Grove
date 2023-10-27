@@ -1,3 +1,4 @@
+import { GraphQLEvergreenClient } from "../../client/graphqlEvergreen";
 import { LegacyEvergreenClient } from "../../client/legacyEvergreen";
 import { V2EvergreenClient } from "../../client/v2Evergreen";
 import { EvergreenConfig, EvergreenProject } from "./config";
@@ -10,6 +11,7 @@ export type EvergreenContext = {
     clients: {
         legacy: LegacyEvergreenClient;
         v2: V2EvergreenClient;
+        graphql: GraphQLEvergreenClient;
     };
 };
 
@@ -39,6 +41,7 @@ export function createEvergreenContext(
             clients: {
                 legacy: new LegacyEvergreenClient(evergreenConfig),
                 v2: new V2EvergreenClient(evergreenConfig),
+                graphql: new GraphQLEvergreenClient(evergreenConfig),
             },
         } satisfies EvergreenContext,
         undefined,
