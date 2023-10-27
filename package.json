@@ -216,6 +216,24 @@
                     ],
                     "default": "prod",
                     "description": "%grove.description.config%"
+                },
+                "grove.customPatches": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "label": {
+                                "type": "string",
+                                "description": "%grove.description.customPatches.label%"
+                            },
+                            "command": {
+                                "type": "string",
+                                "description": "%grove.description.customPatches.command%"
+                            }
+                        }
+                    },
+                    "default": [],
+                    "description": "%grove.description.customPatches%"
                 }
             }
         }

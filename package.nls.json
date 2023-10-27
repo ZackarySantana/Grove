@@ -1,3 +1,10 @@
 {
-    "grove.command.category": "Evergreen"
+    "grove.command.category": "Evergreen",
+    "grove.description.config": "Where your configuration file is located for Evergreen.",
+    "grove.description.config.prod": "Use production configuration (~/.evergreen.yml)",
+    "grove.description.config.staging": "Use staging configuration (~/.evergreen-staging.yml)",
+    "grove.description.config.local": "Use local configuration (~/.evergreen-local.yml)",
+    "grove.description.customPatches": "An array of custom patch commands to save and reuse.",
+    "grove.description.customPatches.label": "This will show up when selecting the button",
+    "grove.description.customPatches.command": "The patch command to run"
 }

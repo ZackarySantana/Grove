@@ -267,9 +267,9 @@ export class PatchParent extends Patch {
             actions.push(this.createActionStartChild());
         } else {
             actions.push(this.createActionOpenChild());
+            actions.push(this.createActionAbortChild());
             actions.push(this.createActionRestartChild());
         }
-        actions.push(this.createActionAbortChild());
         actions.push(this.createActionConfigureChild());
         actions.push(this.createActionsCheckoutChild());
         const child = new PatchChild(

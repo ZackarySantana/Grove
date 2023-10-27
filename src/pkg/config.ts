@@ -3,10 +3,7 @@ import * as vscode from "vscode";
 
 export type GroveConfig = {
     config: string;
-    useUncommitted: boolean | "ask";
-    finalize: boolean | "ask";
-    largePatch: boolean | "ask";
-    browse: boolean | "ask";
+    customPatches: { label: string; command: string }[];
 };
 
 export function getOptionalConfig<T>(
