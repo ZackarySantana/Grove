@@ -159,6 +159,13 @@ export class PatchParent extends Patch {
         return new PatchChild(this.context, `Status: ${this.patch.status}`);
     }
 
+    createActivatedChild(): PatchChild {
+        return new PatchChild(
+            this.context,
+            `Activated: ${this.patch.activated}`,
+        );
+    }
+
     createCreatedChild(): PatchChild {
         return new PatchChild(
             this.context,
@@ -470,6 +477,7 @@ export class PatchParent extends Patch {
         return [
             this.createProjectChild(),
             this.createStatusChild(),
+            this.createActivatedChild(),
             this.createCreatedChild(),
             this.createStartedChild(),
             this.createFinishedChild(),
