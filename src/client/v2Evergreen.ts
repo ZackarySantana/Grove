@@ -147,7 +147,7 @@ export class V2EvergreenClient extends JSONClient {
 
     public getProjectVersions(projectId: string) {
         return this.get<V2Version[]>(
-            `/projects/${projectId}/versions?limit=t`,
+            `/projects/${projectId}/versions?limit=10`,
             {
                 // Currently there is a bug in Evergreen that the tasks don't properly get included.
                 include_builds: true,

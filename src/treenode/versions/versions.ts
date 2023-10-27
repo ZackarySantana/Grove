@@ -150,28 +150,6 @@ export class VersionParent extends Version {
         );
     }
 
-    createActionStartChild(): VersionChild {
-        const start = new VersionChild(this.context, `Start`);
-        start.command = {
-            title: "Start this Version",
-            command: "grove.startVersion",
-            arguments: [this.version.version_id],
-        };
-        start.iconPath = new vscode.ThemeIcon("play");
-        return start;
-    }
-
-    createActionAbortChild(): VersionChild {
-        const abort = new VersionChild(this.context, `Abort`);
-        abort.command = {
-            title: "Abort this Version",
-            command: "grove.stopVersion",
-            arguments: [this.version.version_id],
-        };
-        abort.iconPath = new vscode.ThemeIcon("stop");
-        return abort;
-    }
-
     createActionRestartChild(): VersionChild {
         const abort = new VersionChild(this.context, `Restart`);
         abort.command = {
@@ -196,13 +174,8 @@ export class VersionParent extends Version {
 
     createActionsChild(): VersionChild {
         const actions: VersionChild[] = [];
-        if (!this.version.activated) {
-            actions.push(this.createActionStartChild());
-        } else {
+        if (this.version.activated) {
             actions.push(this.createActionRestartChild());
-            if (this.version.finish_time === null) {
-                actions.push(this.createActionAbortChild());
-            }
         }
         actions.push(this.createActionOpenChild());
         const child = new VersionChild(
