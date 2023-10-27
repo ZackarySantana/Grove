@@ -55,11 +55,6 @@
                 "category": "%grove.command.category%"
             },
             {
-                "command": "grove.restartPatch",
-                "title": "Restart Patch",
-                "category": "%grove.command.category%"
-            },
-            {
                 "command": "grove.restartTask",
                 "title": "Restart Task",
                 "category": "%grove.command.category%"

@@ -206,17 +206,6 @@ export class PatchParent extends Patch {
         return start;
     }
 
-    createActionStartChild(): PatchChild {
-        const start = new PatchChild(this.context, `Start`);
-        start.command = {
-            title: "Start this patch",
-            command: "grove.startPatch",
-            arguments: [this.patch.patch_id, this.context.view],
-        };
-        start.iconPath = new vscode.ThemeIcon("play");
-        return start;
-    }
-
     createActionAbortChild(): PatchChild {
         const abort = new PatchChild(this.context, `Abort`);
         abort.command = {
@@ -263,9 +252,7 @@ export class PatchParent extends Patch {
 
     createActionsChild(): PatchChild {
         const actions: PatchChild[] = [];
-        if (!this.patch.activated) {
-            actions.push(this.createActionStartChild());
-        } else {
+        if (this.patch.activated) {
             actions.push(this.createActionOpenChild());
             actions.push(this.createActionAbortChild());
             actions.push(this.createActionRestartChild());
