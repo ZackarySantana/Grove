@@ -8,6 +8,7 @@ import type {
 import { Task } from "src/pkg/evergreen/types/task";
 import { V2Version, V2VersionAndTasks } from "src/pkg/evergreen/types/version";
 import { Either } from "src/types";
+import { Variant } from "./graphqlEvergreen";
 
 export class V2EvergreenClient extends JSONClient {
     constructor(config: EvergreenConfig) {
@@ -157,6 +158,20 @@ export class V2EvergreenClient extends JSONClient {
 
     public getPatch(id: string) {
         return this.get<V2Patch>(`/patches/${id}`);
+    }
+
+    public configurePatch(
+        id: string,
+        description: string,
+        variants: Variant[],
+    ) {
+        return this.post<V2Patch>(`/patches/${id}/configure`, {
+            variants: variants.map((v) => ({
+                id: v.name,
+                tasks: v.tasks,
+            })),
+            description,
+        });
     }
 
     public restartVersion(id: string) {
