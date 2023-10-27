@@ -240,7 +240,8 @@ export class PatchParent extends Patch {
     }
 
     createActionConfigureChild(): PatchChild {
-        const open = new PatchChild(this.context, `Configure`);
+        const isNew = !this.patch.activated ? " and Start" : "";
+        const open = new PatchChild(this.context, `Configure${isNew}`);
         open.command = {
             title: "Configure",
             command: "grove.configurePatch",
