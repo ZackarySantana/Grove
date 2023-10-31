@@ -2,7 +2,7 @@
     "name": "grove",
     "displayName": "Grove",
     "description": "Streamline using Evergreen",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "publisher": "ZackarySantana",
     "author": "ZackarySantana",
     "repository": {
@@ -245,7 +245,7 @@
         "@types/js-yaml": "^4.0.8",
         "@types/mocha": "^10.0.2",
         "@types/node": "18.x",
-        "@types/vscode": "^1.83.0",
+        "@types/vscode": "^1.62.0",
         "@typescript-eslint/eslint-plugin": "^6.7.3",
         "@typescript-eslint/parser": "^6.7.3",
         "@vscode/test-electron": "^2.3.4",
