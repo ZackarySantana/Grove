@@ -213,6 +213,20 @@ export class PatchParent extends Patch {
         return start;
     }
 
+    createActionsCheckoutPatchChild(): PatchChild {
+        const start = new PatchChild(
+            this.context,
+            `Checkout Commit & Uncommited Changes`,
+        );
+        start.command = {
+            title: "Checkout patch",
+            command: "grove.checkoutPatch",
+            arguments: [this.patch.patch_id],
+        };
+        start.iconPath = new vscode.ThemeIcon("git-branch");
+        return start;
+    }
+
     createActionAbortChild(): PatchChild {
         const abort = new PatchChild(this.context, `Abort`);
         abort.command = {
@@ -267,6 +281,7 @@ export class PatchParent extends Patch {
         }
         actions.push(this.createActionConfigureChild());
         actions.push(this.createActionsCheckoutChild());
+        actions.push(this.createActionsCheckoutPatchChild());
         const child = new PatchChild(
             this.context,
             `Actions`,

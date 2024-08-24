@@ -28,7 +28,6 @@ export function initConfigurePatch(context: GroveContext) {
         }
         let selected: Variant[] = [];
         panel.webview.html = getConfigurePatchWebview(patch, variants);
-        console.log(getConfigurePatchWebview(patch, variants));
         panel.webview.onDidReceiveMessage(
             (tests: Variant[]) => {
                 selected = tests;
@@ -44,7 +43,6 @@ export function initConfigurePatch(context: GroveContext) {
                 return;
             }
             vscode.window.showInformationMessage("Finalizing patch...");
-            console.log(selected);
             const [, err] = await context.evergreen.clients.v2.configurePatch(
                 patch.patch_id,
                 patch.description,

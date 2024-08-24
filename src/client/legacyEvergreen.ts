@@ -2,6 +2,7 @@ import { JSONClient } from "./json";
 import type { EvergreenConfig } from "src/pkg/evergreen/config";
 import type { LegacyPatch } from "src/pkg/evergreen/types/patch";
 import type { Either } from "src/types";
+import axios, { AxiosError } from "axios";
 
 export class LegacyEvergreenClient extends JSONClient {
     constructor(config: EvergreenConfig) {
@@ -27,5 +28,27 @@ export class LegacyEvergreenClient extends JSONClient {
                 return [p.patch, err];
             },
         );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public getPatchFileDiff(url: string): Promise<Either<any, Error>> {
+        return axios
+            .get(url, {
+                headers: { ...this.headers },
+                responseType: "arraybuffer",
+            })
+            .then(
+                (response) =>
+                    [response.data, undefined] as Either<string, Error>,
+            )
+            .catch((err) => {
+                if (err instanceof AxiosError) {
+                    return [undefined, err.response?.data ?? err];
+                }
+                if (err instanceof Error) {
+                    return [undefined, err];
+                }
+                return [undefined, Error(String(err))];
+            });
     }
 }

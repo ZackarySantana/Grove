@@ -20,6 +20,7 @@ import { initAbortPatch } from "./abortPatch";
 import { initConfigurePatch } from "./configurePatch";
 import { initRestartTask } from "./restartTask";
 import { initAbortTask } from "./abortTask";
+import { initCheckoutPatch } from "./checkoutPatch";
 
 export function registerCommands(context: GroveContext) {
     const cmds = {
@@ -30,6 +31,7 @@ export function registerCommands(context: GroveContext) {
         openLink: initOpenLink,
         openFile: initOpenFile,
         checkoutCommit: initCheckoutCommit,
+        checkoutPatch: initCheckoutPatch,
         createPatch: initCreatePatch,
         copyText: initCopyText,
         restartVersion: initRestartVersion,

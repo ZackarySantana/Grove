@@ -2,7 +2,7 @@
     "name": "grove",
     "displayName": "Grove",
     "description": "Streamline using Evergreen",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "ZackarySantana",
     "author": "ZackarySantana",
     "repository": {
@@ -67,6 +67,11 @@
             {
                 "command": "grove.checkoutCommit",
                 "title": "Checkout Commit",
+                "category": "%grove.command.category%"
+            },
+            {
+                "command": "grove.checkoutPatch",
+                "title": "Checkout Patch",
                 "category": "%grove.command.category%"
             },
             {

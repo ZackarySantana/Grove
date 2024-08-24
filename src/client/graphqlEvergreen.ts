@@ -25,7 +25,7 @@ export class GraphQLEvergreenClient extends JSONClient {
     ): Promise<Either<Variant[], Error>> {
         const query = `
         query Patch($patchId: String!) {
-            patch(id: $patchId) {
+            patch(patchId: $patchId) {
                 project {
                     variants {
                         displayName

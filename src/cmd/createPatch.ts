@@ -8,7 +8,6 @@ import { exec } from "child_process";
 
 export function initCreatePatch(context: GroveContext): () => void {
     return async () => {
-        console.log("TESTING");
         const [customPatches, err] = getConfig("customPatches");
         if (err) {
             showError(err);
