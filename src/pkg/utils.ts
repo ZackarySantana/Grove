@@ -77,3 +77,75 @@ export function applyGitDiffs(context: GroveContext, urls: string[]) {
         }
     });
 }
+
+export function getDiffChunk(diff: string, filename: string): string {
+    const lines = diff.split("\n");
+
+    const result: string[] = [];
+    let inFileChunk = false;
+
+    const fileChunkRe = /^diff --git a\/.* b\/.*$/;
+    const fileNameRe = new RegExp(`^diff --git a/${filename} b/${filename}$`);
+
+    for (const line of lines) {
+        if (fileChunkRe.test(line)) {
+            if (fileNameRe.test(line)) {
+                inFileChunk = true;
+                result.push(line);
+            } else {
+                inFileChunk = false;
+            }
+        } else if (inFileChunk) {
+            result.push(line);
+        }
+    }
+
+    return result.join("\n");
+}
+
+export async function downloadDiffFile(
+    context: GroveContext,
+    url: string,
+    file: string,
+    callback: (filePath: string) => Promise<void>,
+) {
+    try {
+        const [data, err] =
+            await context.evergreen.clients.legacy.getPatchFileDiff(
+                url.replace("filediff/", "rawdiff/"),
+            );
+        if (err !== undefined) {
+            showError(`Failed to download diff from ${url}: ${err}`);
+            return;
+        }
+        const tempFilePath = join(tmpdir(), `temp-diff-${Date.now()}.patch`);
+        if (url.includes("filediff/")) {
+            await fs.writeFile(tempFilePath, getDiffChunk(String(data), file));
+        } else {
+            await fs.writeFile(tempFilePath, data);
+        }
+
+        await callback(tempFilePath);
+
+        // await fs.unlink(tempFilePath);
+    } catch (error) {
+        showError(`Failed to download diff from ${url}: ${error}`);
+    }
+}
+
+export async function copyFile(
+    source: string,
+    callback: (filePath: string) => Promise<void>,
+) {
+    try {
+        const tempFilePath = join(tmpdir(), `temp-file-${Date.now()}`);
+        const data = await fs.readFile(source);
+        await fs.writeFile(tempFilePath, data);
+
+        await callback(tempFilePath);
+
+        // await fs.unlink(tempFilePath);
+    } catch (error) {
+        showError(`Failed to copy file from ${source}: ${error}`);
+    }
+}

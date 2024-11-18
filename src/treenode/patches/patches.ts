@@ -457,7 +457,7 @@ export class PatchParent extends Patch {
     createOpenFileChild(label: string, fileName: string): PatchChild {
         const child = new PatchChild(this.context, label);
         child.command = {
-            title: "Open file",
+            title: "Open File",
             command: "grove.openFile",
             arguments: [fileName],
         };
@@ -465,26 +465,36 @@ export class PatchParent extends Patch {
         return child;
     }
 
+    createOpenDiffChild(
+        label: string,
+        fileName: string,
+        diffLink: string,
+    ): PatchChild {
+        const child = new PatchChild(this.context, label);
+        child.command = {
+            title: "Open Diff",
+            command: "grove.openDiff",
+            arguments: [fileName, diffLink],
+        };
+        child.iconPath = new vscode.ThemeIcon("open-editors-view-icon");
+        return child;
+    }
+
     createChangesChild(): PatchChild {
+        console.log(this.patch.module_code_changes);
         return new PatchChild(
             this.context,
             `Changes`,
             this.patch.module_code_changes.flatMap((p) =>
-                p.file_diffs.flatMap(
-                    (s) =>
-                        new PatchChild(this.context, s.file_name, [
-                            this.createOpenFileChild("Open File", s.file_name),
-                            new PatchChild(
-                                this.context,
-                                `Additions: ${s.additions}`,
-                            ),
-                            new PatchChild(
-                                this.context,
-                                `Deletions: ${s.deletions}`,
-                            ),
-                        ]),
+                p.file_diffs.flatMap((s) =>
+                    this.createOpenDiffChild(
+                        `'${s.file_name}' +${s.additions} -${s.deletions}`,
+                        s.file_name,
+                        s.diff_link,
+                    ),
                 ),
             ),
+            vscode.TreeItemCollapsibleState.Collapsed,
         );
     }
 

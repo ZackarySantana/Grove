@@ -35,6 +35,11 @@
                 "category": "%grove.command.category%"
             },
             {
+                "command": "grove.openDiff",
+                "title": "Open Diff",
+                "category": "%grove.command.category%"
+            },
+            {
                 "command": "grove.abortVersion",
                 "title": "Abort Version",
                 "category": "%grove.command.category%"
